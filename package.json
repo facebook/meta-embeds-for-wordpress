@@ -1,0 +1,16 @@
+{
+	"name": "meta-embeds-for-wordpress",
+	"version": "1.0.0",
+	"description": "Official WordPress plugin for embedding content from Meta platforms.",
+	"private": true,
+	"scripts": {
+		"lint:js": "eslint src/",
+		"lint:css": "stylelint 'src/**/*.css'"
+	},
+	"devDependencies": {
+		"@wordpress/eslint-plugin": "^21.0.0",
+		"@wordpress/stylelint-config": "^23.0.0",
+		"eslint": "^8.57.0",
+		"stylelint": "^16.0.0"
+	}
+}

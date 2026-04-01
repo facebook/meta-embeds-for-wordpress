@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://www.facebook.com/whitehat/
+    about: Report security vulnerabilities through Facebook's Whitehat program. Do not file a public issue.

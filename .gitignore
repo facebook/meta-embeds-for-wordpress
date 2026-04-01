@@ -1,0 +1,33 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build artifacts
+/build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
+# npm
+package-lock.json
+
+# PHPUnit
+.phpunit.result.cache
+/phpunit.xml
+
+# Claude Code
+.claude/
+
+# WordPress
+/wp-content/

@@ -1,0 +1,21 @@
+# Distribution archive excludes
+.claude export-ignore
+.editorconfig export-ignore
+.eslintrc.json export-ignore
+.gitattributes export-ignore
+.github export-ignore
+.gitignore export-ignore
+.stylelintrc.json export-ignore
+bin export-ignore
+composer.json export-ignore
+composer.lock export-ignore
+CODE_OF_CONDUCT.md export-ignore
+CONTRIBUTING.md export-ignore
+node_modules export-ignore
+package.json export-ignore
+package-lock.json export-ignore
+phpcs.xml.dist export-ignore
+phpunit.xml.dist export-ignore
+phpunit.xml export-ignore
+tests export-ignore
+vendor export-ignore
