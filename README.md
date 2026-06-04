@@ -1,11 +1,12 @@
 # Meta Embeds for WordPress
 
-Embed [Threads](https://www.threads.com) content in your WordPress site. Paste a Threads URL into the editor and get a rich embed automatically, powered by Meta's [tokenless oEmbed API](https://developers.facebook.com/docs/threads/tools-and-resources/embed-a-threads-post). No access tokens or configuration required.
+Embed [Threads](https://www.threads.com) and [Instagram](https://www.instagram.com) content in your WordPress site. Paste a URL into the editor and get a rich embed automatically, powered by Meta's tokenless oEmbed APIs. No access tokens or configuration required.
 
 ## Features
 
 - Paste a Threads post URL and get a rich, interactive embed
-- Dedicated "Threads Embed" block in the Block Editor with live preview
+- Paste an Instagram post or Reel URL and get a rich, interactive embed
+- Dedicated "Threads Embed" and "Instagram Embed" blocks in the Block Editor with live preview
 - Classic Editor support: paste a URL on its own line and it auto-embeds
 - No access tokens, API keys, or settings pages needed
 - Lightweight with no external dependencies
@@ -29,19 +30,25 @@ Requires WordPress 5.9+ and PHP 7.4+.
 
 ## Usage
 
-Paste a Threads URL on its own line in the editor:
+Paste a Threads or Instagram URL on its own line in the editor:
 
 ```
 https://www.threads.com/@threads/post/DWjTI0cgH5O
 ```
 
+```
+https://www.instagram.com/p/fA9uwTtkSN/
+```
+
 The plugin handles the rest.
 
-Both `threads.com` and legacy `threads.net` URLs are supported, including `/t/` short links (e.g. `threads.com/t/POST_ID`).
+**Threads:** Both `threads.com` and legacy `threads.net` URLs are supported, including `/t/` short links (e.g. `threads.com/t/POST_ID`).
+
+**Instagram:** Post URLs (`instagram.com/p/SHORTCODE`) and Reel URLs (`instagram.com/reel/SHORTCODE`) are supported.
 
 ## Privacy
 
-When a Threads URL is embedded, WordPress makes a server-side request to Meta's oEmbed API (`graph.threads.com/oembed`) to fetch the embed HTML. The embed loads `threads.com/embed.js` on the frontend for rendering. No user data is collected or stored by this plugin. Frontend embed rendering is subject to [Meta's Privacy Policy](https://www.facebook.com/privacy/policy/).
+When a Threads or Instagram URL is embedded, WordPress makes a server-side request to Meta's oEmbed API (`graph.threads.com/oembed` for Threads, `graph.facebook.com/v25.0/instagram_oembed` for Instagram) to fetch the embed HTML. The embed loads `threads.com/embed.js` or `instagram.com/embed.js` on the frontend for rendering. No user data is collected or stored by this plugin. Frontend embed rendering is subject to [Meta's Privacy Policy](https://www.facebook.com/privacy/policy/).
 
 ## Contributing
 
