@@ -70,7 +70,7 @@
 			title: __('Instagram Embed', 'meta-embeds'),
 			icon: InstagramIcon,
 			description: __(
-				'Embed an Instagram post, Reel, or profile.',
+				'Embed an Instagram post, reel, or profile.',
 				'meta-embeds'
 			),
 			patterns: [

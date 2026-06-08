@@ -14,5 +14,5 @@ All notable changes to this project will be documented in this file.
 * Initial release.
 * Added Threads oEmbed provider registration for threads.com and threads.net URLs.
 * Added Block Editor embed variation with a dedicated Threads icon.
-* Added automatic embed.js SDK loading with deferred strategy.
+* Added automatic threads.com/embed.js SDK loading with deferred strategy.
 * Added core deduplication to skip registration when WordPress already provides a Threads endpoint.
