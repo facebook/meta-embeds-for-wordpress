@@ -42,6 +42,26 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Instagram oEmbed provider is registered.
+	 */
+	public function test_instagram_oembed_provider_registered() {
+		// Trigger provider registration.
+		do_action( 'init' );
+
+		$oembed = _wp_oembed_get_object();
+
+		$found = false;
+		foreach ( $oembed->providers as $pattern => $provider_info ) {
+			if ( strpos( $provider_info[0], 'graph.facebook.com' ) !== false ) {
+				$found = true;
+				break;
+			}
+		}
+
+		$this->assertTrue( $found, 'Instagram oEmbed provider should be registered.' );
+	}
+
+	/**
 	 * Test that Threads URLs match the registered pattern.
 	 *
 	 * @dataProvider threads_url_provider
@@ -92,6 +112,65 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Instagram URLs match the registered pattern.
+	 *
+	 * @dataProvider instagram_url_provider
+	 * @param string $url      The URL to test.
+	 * @param bool   $expected Whether the URL should match.
+	 */
+	public function test_instagram_url_matching( $url, $expected ) {
+		$patterns = array(
+			'#https?://(www\.)?instagram\.com/(p|reel)/[^/]+#i',
+			'#https?://(www\.)?instagram\.com/(?!stories/|explore/|accounts/|direct/|tv/|about/|legal/|developer/|api/|static/|nametag/|directory/)([a-zA-Z0-9._]{1,30})/?(\?.*)?$#i',
+		);
+
+		$matched = false;
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $url ) ) {
+				$matched = true;
+				break;
+			}
+		}
+
+		$this->assertSame( $expected, $matched, "URL: {$url}" );
+	}
+
+	/**
+	 * Data provider for Instagram URL tests.
+	 */
+	public function instagram_url_provider() {
+		return array(
+			// Post URLs.
+			'post with www'                => array( 'https://www.instagram.com/p/fA9uwTtkSN/', true ),
+			'post without www'             => array( 'https://instagram.com/p/fA9uwTtkSN/', true ),
+			'post without trailing slash'  => array( 'https://www.instagram.com/p/fA9uwTtkSN', true ),
+			'post http'                    => array( 'http://www.instagram.com/p/fA9uwTtkSN/', true ),
+			// Reel URLs.
+			'reel with www'                => array( 'https://www.instagram.com/reel/ABC123/', true ),
+			'reel without www'             => array( 'https://instagram.com/reel/ABC123/', true ),
+			'reel without trailing slash'  => array( 'https://www.instagram.com/reel/ABC123', true ),
+			'reel http'                    => array( 'http://www.instagram.com/reel/ABC123/', true ),
+			// Profile URLs.
+			'profile with www'             => array( 'https://www.instagram.com/zuck', true ),
+			'profile without www'          => array( 'https://instagram.com/zuck', true ),
+			'profile with trailing slash'  => array( 'https://www.instagram.com/zuck/', true ),
+			'profile http'                 => array( 'http://www.instagram.com/zuck', true ),
+			'profile with dots'            => array( 'https://www.instagram.com/some.user', true ),
+			'profile with underscores'     => array( 'https://www.instagram.com/some_user', true ),
+			'profile with query params'    => array( 'https://www.instagram.com/zuck?hl=en', true ),
+			'profile with slash and query' => array( 'https://www.instagram.com/zuck/?utm_source=share', true ),
+			// Invalid URLs.
+			'invalid - homepage'           => array( 'https://www.instagram.com/', false ),
+			'invalid - stories'            => array( 'https://www.instagram.com/stories/zuck/123456', false ),
+			'invalid - explore'            => array( 'https://www.instagram.com/explore/', false ),
+			'invalid - accounts'           => array( 'https://www.instagram.com/accounts/login/', false ),
+			'invalid - direct'             => array( 'https://www.instagram.com/direct/inbox/', false ),
+			'invalid - other site'         => array( 'https://www.threads.com/@zuck/post/C123', false ),
+			'invalid - random text'        => array( 'not a url', false ),
+		);
+	}
+
+	/**
 	 * Test that embed SDK script tags are stripped from oEmbed HTML.
 	 */
 	public function test_filter_embed_html_strips_script() {
@@ -127,12 +206,30 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Instagram embed SDK script tags are stripped from oEmbed HTML.
+	 */
+	public function test_filter_embed_html_strips_instagram_script() {
+		$instance = Meta_Embeds::get_instance();
+
+		// phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedScript -- Test data, not actual script output.
+		$html = '<blockquote class="instagram-media">Content</blockquote>'
+			. "\n" . '<script async src="https://www.instagram.com/embed.js"></script>';
+		// phpcs:enable WordPress.WP.EnqueuedResources.NonEnqueuedScript
+
+		$filtered = $instance->filter_embed_html( $html );
+
+		$this->assertStringContainsString( '<blockquote', $filtered );
+		$this->assertStringNotContainsString( '<script', $filtered );
+		$this->assertStringNotContainsString( 'embed.js', $filtered );
+	}
+
+	/**
 	 * Test that plugin constants are defined.
 	 */
 	public function test_constants_defined() {
 		$this->assertTrue( defined( 'META_EMBEDS_VERSION' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_DIR' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_URL' ) );
-		$this->assertSame( '1.0.0', META_EMBEDS_VERSION );
+		$this->assertSame( '1.1.0', META_EMBEDS_VERSION );
 	}
 }

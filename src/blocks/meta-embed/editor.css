@@ -6,9 +6,11 @@
  * @license GPL-2.0-or-later
  */
 
-/* stylelint-disable-next-line selector-class-pattern -- WordPress core class name. */
-.wp-block-embed.is-provider-threads .wp-block-embed__wrapper {
+/* stylelint-disable selector-class-pattern -- WordPress core class names. */
+.wp-block-embed.is-provider-threads .wp-block-embed__wrapper,
+.wp-block-embed.is-provider-instagram .wp-block-embed__wrapper {
 	max-width: 550px;
 	margin-left: auto;
 	margin-right: auto;
 }
+/* stylelint-enable selector-class-pattern */

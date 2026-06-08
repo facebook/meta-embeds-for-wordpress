@@ -10,7 +10,7 @@
  */
 
 (function (wp) {
-	const { registerBlockVariation } = wp.blocks;
+	const { registerBlockVariation, unregisterBlockVariation } = wp.blocks;
 	const { __ } = wp.i18n;
 	const { createElement } = wp.element;
 
@@ -29,6 +29,20 @@
 	);
 
 	/**
+	 * Instagram icon SVG.
+	 */
+	const InstagramIcon = createElement(
+		'svg',
+		{
+			xmlns: 'http://www.w3.org/2000/svg',
+			viewBox: '0 0 24 24',
+		},
+		createElement('path', {
+			d: 'M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z',
+		})
+	);
+
+	/**
 	 * Register Threads embed block variation.
 	 */
 	registerBlockVariation('core/embed', {
@@ -43,5 +57,30 @@
 			providerNameSlug: 'threads',
 			responsive: true,
 		},
+	});
+
+	/**
+	 * Replace Core's Instagram embed variation with ours (uses tokenless oEmbed).
+	 */
+	wp.domReady(function () {
+		unregisterBlockVariation('core/embed', 'instagram');
+
+		registerBlockVariation('core/embed', {
+			name: 'instagram',
+			title: __('Instagram Embed', 'meta-embeds'),
+			icon: InstagramIcon,
+			description: __(
+				'Embed an Instagram post, reel, or profile.',
+				'meta-embeds'
+			),
+			patterns: [
+				/^https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[^/]+/i,
+				/^https?:\/\/(?:www\.)?instagram\.com\/(?!stories\/|explore\/|accounts\/|direct\/|tv\/|about\/|legal\/|developer\/|api\/|static\/|nametag\/|directory\/)([a-zA-Z0-9._]{1,30})\/?(\?.*)?$/i,
+			],
+			attributes: {
+				providerNameSlug: 'instagram',
+				responsive: true,
+			},
+		});
 	});
 })(window.wp);
