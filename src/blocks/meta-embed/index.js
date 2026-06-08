@@ -75,7 +75,7 @@
 			),
 			patterns: [
 				/^https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel)\/[^/]+/i,
-				/^https?:\/\/(?:www\.)?instagram\.com\/(?!p\/|reel\/|stories\/|explore\/|accounts\/|direct\/|reels\/|tv\/|about\/|legal\/|developer\/|api\/|static\/|nametag\/|directory\/)([a-zA-Z0-9._]{1,30})\/?$/i,
+				/^https?:\/\/(?:www\.)?instagram\.com\/(?!stories\/|explore\/|accounts\/|direct\/|tv\/|about\/|legal\/|developer\/|api\/|static\/|nametag\/|directory\/)([a-zA-Z0-9._]{1,30})\/?(\?.*)?$/i,
 			],
 			attributes: {
 				providerNameSlug: 'instagram',

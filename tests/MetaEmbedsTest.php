@@ -121,7 +121,7 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	public function test_instagram_url_matching( $url, $expected ) {
 		$patterns = array(
 			'#https?://(www\.)?instagram\.com/(p|reel)/[^/]+#i',
-			'#https?://(www\.)?instagram\.com/(?!p/|reel/|stories/|explore/|accounts/|direct/|reels/|tv/|about/|legal/|developer/|api/|static/|nametag/|directory/)([a-zA-Z0-9._]{1,30})/?$#i',
+			'#https?://(www\.)?instagram\.com/(?!stories/|explore/|accounts/|direct/|tv/|about/|legal/|developer/|api/|static/|nametag/|directory/)([a-zA-Z0-9._]{1,30})/?(\?.*)?$#i',
 		);
 
 		$matched = false;
@@ -141,30 +141,32 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	public function instagram_url_provider() {
 		return array(
 			// Post URLs.
-			'post with www'               => array( 'https://www.instagram.com/p/fA9uwTtkSN/', true ),
-			'post without www'            => array( 'https://instagram.com/p/fA9uwTtkSN/', true ),
-			'post without trailing slash' => array( 'https://www.instagram.com/p/fA9uwTtkSN', true ),
-			'post http'                   => array( 'http://www.instagram.com/p/fA9uwTtkSN/', true ),
+			'post with www'                => array( 'https://www.instagram.com/p/fA9uwTtkSN/', true ),
+			'post without www'             => array( 'https://instagram.com/p/fA9uwTtkSN/', true ),
+			'post without trailing slash'  => array( 'https://www.instagram.com/p/fA9uwTtkSN', true ),
+			'post http'                    => array( 'http://www.instagram.com/p/fA9uwTtkSN/', true ),
 			// Reel URLs.
-			'reel with www'               => array( 'https://www.instagram.com/reel/ABC123/', true ),
-			'reel without www'            => array( 'https://instagram.com/reel/ABC123/', true ),
-			'reel without trailing slash' => array( 'https://www.instagram.com/reel/ABC123', true ),
-			'reel http'                   => array( 'http://www.instagram.com/reel/ABC123/', true ),
+			'reel with www'                => array( 'https://www.instagram.com/reel/ABC123/', true ),
+			'reel without www'             => array( 'https://instagram.com/reel/ABC123/', true ),
+			'reel without trailing slash'  => array( 'https://www.instagram.com/reel/ABC123', true ),
+			'reel http'                    => array( 'http://www.instagram.com/reel/ABC123/', true ),
 			// Profile URLs.
-			'profile with www'            => array( 'https://www.instagram.com/zuck', true ),
-			'profile without www'         => array( 'https://instagram.com/zuck', true ),
-			'profile with trailing slash' => array( 'https://www.instagram.com/zuck/', true ),
-			'profile http'                => array( 'http://www.instagram.com/zuck', true ),
-			'profile with dots'           => array( 'https://www.instagram.com/some.user', true ),
-			'profile with underscores'    => array( 'https://www.instagram.com/some_user', true ),
+			'profile with www'             => array( 'https://www.instagram.com/zuck', true ),
+			'profile without www'          => array( 'https://instagram.com/zuck', true ),
+			'profile with trailing slash'  => array( 'https://www.instagram.com/zuck/', true ),
+			'profile http'                 => array( 'http://www.instagram.com/zuck', true ),
+			'profile with dots'            => array( 'https://www.instagram.com/some.user', true ),
+			'profile with underscores'     => array( 'https://www.instagram.com/some_user', true ),
+			'profile with query params'    => array( 'https://www.instagram.com/zuck?hl=en', true ),
+			'profile with slash and query' => array( 'https://www.instagram.com/zuck/?utm_source=share', true ),
 			// Invalid URLs.
-			'invalid - homepage'          => array( 'https://www.instagram.com/', false ),
-			'invalid - stories'           => array( 'https://www.instagram.com/stories/zuck/123456', false ),
-			'invalid - explore'           => array( 'https://www.instagram.com/explore/', false ),
-			'invalid - accounts'          => array( 'https://www.instagram.com/accounts/login/', false ),
-			'invalid - direct'            => array( 'https://www.instagram.com/direct/inbox/', false ),
-			'invalid - other site'        => array( 'https://www.threads.com/@zuck/post/C123', false ),
-			'invalid - random text'       => array( 'not a url', false ),
+			'invalid - homepage'           => array( 'https://www.instagram.com/', false ),
+			'invalid - stories'            => array( 'https://www.instagram.com/stories/zuck/123456', false ),
+			'invalid - explore'            => array( 'https://www.instagram.com/explore/', false ),
+			'invalid - accounts'           => array( 'https://www.instagram.com/accounts/login/', false ),
+			'invalid - direct'             => array( 'https://www.instagram.com/direct/inbox/', false ),
+			'invalid - other site'         => array( 'https://www.threads.com/@zuck/post/C123', false ),
+			'invalid - random text'        => array( 'not a url', false ),
 		);
 	}
 
