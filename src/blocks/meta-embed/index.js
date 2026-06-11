@@ -43,6 +43,20 @@
 	);
 
 	/**
+	 * Facebook icon SVG.
+	 */
+	const FacebookIcon = createElement(
+		'svg',
+		{
+			xmlns: 'http://www.w3.org/2000/svg',
+			viewBox: '0 0 24 24',
+		},
+		createElement('path', {
+			d: 'M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z',
+		})
+	);
+
+	/**
 	 * Register Threads embed block variation.
 	 */
 	registerBlockVariation('core/embed', {
@@ -60,7 +74,8 @@
 	});
 
 	/**
-	 * Replace Core's Instagram embed variation with ours (uses tokenless oEmbed).
+	 * Replace Core's Instagram and Facebook embed variations with ours
+	 * (uses tokenless oEmbed).
 	 */
 	wp.domReady(function () {
 		unregisterBlockVariation('core/embed', 'instagram');
@@ -79,6 +94,23 @@
 			],
 			attributes: {
 				providerNameSlug: 'instagram',
+				responsive: true,
+			},
+		});
+
+		unregisterBlockVariation('core/embed', 'facebook');
+
+		registerBlockVariation('core/embed', {
+			name: 'facebook',
+			title: __('Facebook Embed', 'meta-embeds'),
+			icon: FacebookIcon,
+			description: __('Embed a Facebook post or video.', 'meta-embeds'),
+			patterns: [
+				/^https?:\/\/(?:www\.)?facebook\.com\/[^/]+\/posts\/[^/]+/i,
+				/^https?:\/\/(?:www\.)?facebook\.com\/reel\/[^/]+/i,
+			],
+			attributes: {
+				providerNameSlug: 'facebook',
 				responsive: true,
 			},
 		});

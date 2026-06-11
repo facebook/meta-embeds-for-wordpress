@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.0
+
+* Added Facebook oEmbed provider registration for post and reel URLs.
+* Added Block Editor embed variation with a dedicated Facebook icon.
+* Added automatic connect.facebook.net SDK loading with deferred strategy.
+* Added core deduplication to skip registration when WordPress already provides a Facebook endpoint.
+
 ## 1.1.0
 
 * Added Instagram oEmbed provider registration for post, reel, and profile URLs.

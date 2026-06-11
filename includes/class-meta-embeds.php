@@ -35,7 +35,7 @@ class Meta_Embeds {
 	 * @var array
 	 */
 	private $providers = array(
-		'threads'   => array(
+		'threads'        => array(
 			'patterns'     => array(
 				'#https?://(www\.)?threads\.(com|net)/@[^/]+/post/.+#i',
 				'#https?://(www\.)?threads\.(com|net)/t/.+#i',
@@ -43,13 +43,27 @@ class Meta_Embeds {
 			'endpoint'     => 'https://graph.threads.com/oembed',
 			'embed_script' => 'https://www.threads.com/embed.js',
 		),
-		'instagram' => array(
+		'instagram'      => array(
 			'patterns'     => array(
 				'#https?://(www\.)?instagram\.com/(p|reel)/[^/]+#i',
 				'#https?://(www\.)?instagram\.com/(?!stories/|explore/|accounts/|direct/|tv/|about/|legal/|developer/|api/|static/|nametag/|directory/)([a-zA-Z0-9._]{1,30})/?(\?.*)?$#i',
 			),
 			'endpoint'     => 'https://graph.facebook.com/v25.0/instagram_oembed',
 			'embed_script' => 'https://www.instagram.com/embed.js',
+		),
+		'facebook-post'  => array(
+			'patterns'     => array(
+				'#https?://(www\.)?facebook\.com/[^/]+/posts/[^/]+#i',
+			),
+			'endpoint'     => 'https://graph.facebook.com/oembed_post',
+			'embed_script' => 'https://connect.facebook.net/en_US/sdk.js',
+		),
+		'facebook-video' => array(
+			'patterns'     => array(
+				'#https?://(www\.)?facebook\.com/reel/[^/]+#i',
+			),
+			'endpoint'     => 'https://graph.facebook.com/oembed_video',
+			'embed_script' => 'https://connect.facebook.net/en_US/sdk.js',
 		),
 	);
 
@@ -141,7 +155,11 @@ class Meta_Embeds {
 			return;
 		}
 
+		$enqueued = array();
 		foreach ( $this->providers as $name => $provider ) {
+			if ( in_array( $provider['embed_script'], $enqueued, true ) ) {
+				continue;
+			}
 			if ( $this->post_has_embed( $post, $provider['patterns'] ) ) {
 				// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, no local version.
 				wp_enqueue_script(
@@ -155,6 +173,7 @@ class Meta_Embeds {
 					)
 				);
 				// phpcs:enable WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				$enqueued[] = $provider['embed_script'];
 			}
 		}
 	}
@@ -173,7 +192,7 @@ class Meta_Embeds {
 	public function filter_embed_html( $html ) {
 		foreach ( $this->providers as $provider ) {
 			$html = preg_replace(
-				'#<script[^>]*\ssrc=["\']' . preg_quote( $provider['embed_script'], '#' ) . '["\'][^>]*>\s*</script>#i',
+				'#<script[^>]*\ssrc=["\']' . preg_quote( $provider['embed_script'], '#' ) . '[^"\']*["\'][^>]*>\s*</script>#i',
 				'',
 				$html
 			);

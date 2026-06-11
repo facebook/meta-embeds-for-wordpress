@@ -62,6 +62,46 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Facebook post oEmbed provider is registered.
+	 */
+	public function test_facebook_post_oembed_provider_registered() {
+		// Trigger provider registration.
+		do_action( 'init' );
+
+		$oembed = _wp_oembed_get_object();
+
+		$found = false;
+		foreach ( $oembed->providers as $pattern => $provider_info ) {
+			if ( strpos( $provider_info[0], 'oembed_post' ) !== false ) {
+				$found = true;
+				break;
+			}
+		}
+
+		$this->assertTrue( $found, 'Facebook post oEmbed provider should be registered.' );
+	}
+
+	/**
+	 * Test that Facebook video oEmbed provider is registered.
+	 */
+	public function test_facebook_video_oembed_provider_registered() {
+		// Trigger provider registration.
+		do_action( 'init' );
+
+		$oembed = _wp_oembed_get_object();
+
+		$found = false;
+		foreach ( $oembed->providers as $pattern => $provider_info ) {
+			if ( strpos( $provider_info[0], 'oembed_video' ) !== false ) {
+				$found = true;
+				break;
+			}
+		}
+
+		$this->assertTrue( $found, 'Facebook video oEmbed provider should be registered.' );
+	}
+
+	/**
 	 * Test that Threads URLs match the registered pattern.
 	 *
 	 * @dataProvider threads_url_provider
@@ -171,6 +211,91 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Facebook post URLs match the registered pattern.
+	 *
+	 * @dataProvider facebook_post_url_provider
+	 * @param string $url      The URL to test.
+	 * @param bool   $expected Whether the URL should match.
+	 */
+	public function test_facebook_post_url_matching( $url, $expected ) {
+		$patterns = array(
+			'#https?://(www\.)?facebook\.com/[^/]+/posts/[^/]+#i',
+		);
+
+		$matched = false;
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $url ) ) {
+				$matched = true;
+				break;
+			}
+		}
+
+		$this->assertSame( $expected, $matched, "URL: {$url}" );
+	}
+
+	/**
+	 * Data provider for Facebook post URL tests.
+	 */
+	public function facebook_post_url_provider() {
+		return array(
+			// Post URLs.
+			'post with www'            => array( 'https://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz', true ),
+			'post without www'         => array( 'https://facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz', true ),
+			'post with trailing slash' => array( 'https://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz/', true ),
+			'post http'                => array( 'http://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz', true ),
+			'post numeric id'          => array( 'https://www.facebook.com/123456789/posts/987654321', true ),
+			// Invalid URLs.
+			'invalid - homepage'       => array( 'https://www.facebook.com/', false ),
+			'invalid - profile only'   => array( 'https://www.facebook.com/kevinloveofficial', false ),
+			'invalid - reel'           => array( 'https://www.facebook.com/reel/3305054673010377', false ),
+			'invalid - other site'     => array( 'https://www.instagram.com/p/ABC123', false ),
+			'invalid - random text'    => array( 'not a url', false ),
+		);
+	}
+
+	/**
+	 * Test that Facebook video URLs match the registered pattern.
+	 *
+	 * @dataProvider facebook_video_url_provider
+	 * @param string $url      The URL to test.
+	 * @param bool   $expected Whether the URL should match.
+	 */
+	public function test_facebook_video_url_matching( $url, $expected ) {
+		$patterns = array(
+			'#https?://(www\.)?facebook\.com/reel/[^/]+#i',
+		);
+
+		$matched = false;
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $url ) ) {
+				$matched = true;
+				break;
+			}
+		}
+
+		$this->assertSame( $expected, $matched, "URL: {$url}" );
+	}
+
+	/**
+	 * Data provider for Facebook video URL tests.
+	 */
+	public function facebook_video_url_provider() {
+		return array(
+			// Reel URLs.
+			'reel with www'            => array( 'https://www.facebook.com/reel/3305054673010377', true ),
+			'reel without www'         => array( 'https://facebook.com/reel/3305054673010377', true ),
+			'reel with trailing slash' => array( 'https://www.facebook.com/reel/3305054673010377/', true ),
+			'reel http'                => array( 'http://www.facebook.com/reel/3305054673010377', true ),
+			// Invalid URLs.
+			'invalid - homepage'       => array( 'https://www.facebook.com/', false ),
+			'invalid - profile only'   => array( 'https://www.facebook.com/kevinloveofficial', false ),
+			'invalid - post'           => array( 'https://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz', false ),
+			'invalid - other site'     => array( 'https://www.instagram.com/reel/ABC123', false ),
+			'invalid - random text'    => array( 'not a url', false ),
+		);
+	}
+
+	/**
 	 * Test that embed SDK script tags are stripped from oEmbed HTML.
 	 */
 	public function test_filter_embed_html_strips_script() {
@@ -224,12 +349,32 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that Facebook embed SDK script tags are stripped from oEmbed HTML.
+	 */
+	public function test_filter_embed_html_strips_facebook_script() {
+		$instance = Meta_Embeds::get_instance();
+
+		// phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedScript -- Test data, not actual script output.
+		$html = '<div id="fb-root"></div>'
+			. "\n" . '<script async="1" defer="1" crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v25.0"></script>'
+			. '<div class="fb-post" data-href="https://www.facebook.com/test/posts/123"></div>';
+		// phpcs:enable WordPress.WP.EnqueuedResources.NonEnqueuedScript
+
+		$filtered = $instance->filter_embed_html( $html );
+
+		$this->assertStringContainsString( 'fb-root', $filtered );
+		$this->assertStringContainsString( 'fb-post', $filtered );
+		$this->assertStringNotContainsString( '<script', $filtered );
+		$this->assertStringNotContainsString( 'sdk.js', $filtered );
+	}
+
+	/**
 	 * Test that plugin constants are defined.
 	 */
 	public function test_constants_defined() {
 		$this->assertTrue( defined( 'META_EMBEDS_VERSION' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_DIR' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_URL' ) );
-		$this->assertSame( '1.1.0', META_EMBEDS_VERSION );
+		$this->assertSame( '1.2.0', META_EMBEDS_VERSION );
 	}
 }
