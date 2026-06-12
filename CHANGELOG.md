@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.1
+
+* Fixed Instagram provider test to match `instagram_oembed` specifically instead of the ambiguous `graph.facebook.com`.
+* Fixed duplicate embed script removal when multiple providers use the same SDK (e.g. Facebook posts and videos).
+* Tightened embed script stripping regex to only allow URL fragments or query strings after the base SDK URL.
+* Updated Facebook oEmbed endpoints to use versioned API paths (`v25.0`).
+* Fixed Facebook embeds not rendering on published pages by enqueuing the SDK with the required `#xfbml=1` fragment.
+
 ## 1.2.0
 
 * Added Facebook oEmbed provider registration for post and reel URLs.

@@ -30,7 +30,9 @@ class Meta_Embeds {
 	 * Each entry contains:
 	 *   - patterns: Array of regex patterns for matching URLs.
 	 *   - endpoint: oEmbed API endpoint URL.
-	 *   - embed_script: URL of the embed SDK script for rendering.
+	 *   - embed_script: Base URL of the embed SDK script (used for stripping inline tags).
+	 *   - enqueue_url: (optional) Full URL to enqueue if different from embed_script
+	 *                  (e.g. Facebook SDK requires a #xfbml=1 fragment to auto-render).
 	 *
 	 * @var array
 	 */
@@ -55,15 +57,17 @@ class Meta_Embeds {
 			'patterns'     => array(
 				'#https?://(www\.)?facebook\.com/[^/]+/posts/[^/]+#i',
 			),
-			'endpoint'     => 'https://graph.facebook.com/oembed_post',
+			'endpoint'     => 'https://graph.facebook.com/v25.0/oembed_post',
 			'embed_script' => 'https://connect.facebook.net/en_US/sdk.js',
+			'enqueue_url'  => 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v25.0',
 		),
 		'facebook-video' => array(
 			'patterns'     => array(
 				'#https?://(www\.)?facebook\.com/reel/[^/]+#i',
 			),
-			'endpoint'     => 'https://graph.facebook.com/oembed_video',
+			'endpoint'     => 'https://graph.facebook.com/v25.0/oembed_video',
 			'embed_script' => 'https://connect.facebook.net/en_US/sdk.js',
+			'enqueue_url'  => 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v25.0',
 		),
 	);
 
@@ -161,10 +165,11 @@ class Meta_Embeds {
 				continue;
 			}
 			if ( $this->post_has_embed( $post, $provider['patterns'] ) ) {
+				$src = isset( $provider['enqueue_url'] ) ? $provider['enqueue_url'] : $provider['embed_script'];
 				// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, no local version.
 				wp_enqueue_script(
 					"meta-embeds-{$name}-sdk",
-					$provider['embed_script'],
+					$src,
 					array(),
 					null,
 					array(
@@ -190,12 +195,17 @@ class Meta_Embeds {
 	 * @return string Filtered HTML without embed SDK script tags.
 	 */
 	public function filter_embed_html( $html ) {
+		$stripped = array();
 		foreach ( $this->providers as $provider ) {
-			$html = preg_replace(
-				'#<script[^>]*\ssrc=["\']' . preg_quote( $provider['embed_script'], '#' ) . '[^"\']*["\'][^>]*>\s*</script>#i',
+			if ( in_array( $provider['embed_script'], $stripped, true ) ) {
+				continue;
+			}
+			$html       = preg_replace(
+				'#<script[^>]*\ssrc=["\']' . preg_quote( $provider['embed_script'], '#' ) . '([\#?][^"\']*)?["\'][^>]*>\s*</script>#i',
 				'',
 				$html
 			);
+			$stripped[] = $provider['embed_script'];
 		}
 		return $html;
 	}

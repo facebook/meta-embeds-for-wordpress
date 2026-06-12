@@ -1,6 +1,6 @@
 {
 	"name": "meta-embeds-for-wordpress",
-	"version": "1.0.0",
+	"version": "1.2.1",
 	"description": "Official WordPress plugin for embedding content from Meta platforms.",
 	"private": true,
 	"scripts": {

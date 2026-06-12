@@ -4,7 +4,7 @@ Tags: threads, instagram, facebook, embed, oembed, meta, social
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,13 @@ The plugin automatically detects if your WordPress version already includes a Th
 
 == Changelog ==
 
+= 1.2.1 =
+* Fixed Instagram provider test to match `instagram_oembed` specifically instead of the ambiguous `graph.facebook.com`.
+* Fixed duplicate embed script removal when multiple providers use the same SDK (e.g. Facebook posts and videos).
+* Tightened embed script stripping regex to only allow URL fragments or query strings after the base SDK URL.
+* Updated Facebook oEmbed endpoints to use versioned API paths (`v25.0`).
+* Fixed Facebook embeds not rendering on published pages by enqueuing the SDK with the required `#xfbml=1` fragment.
+
 = 1.2.0 =
 * Added Facebook oEmbed provider registration for post and reel URLs.
 * Added Block Editor embed variation with a dedicated Facebook icon.
@@ -123,7 +130,7 @@ Initial release with Threads embed support.
 
 This plugin registers Meta's oEmbed API endpoints as providers in WordPress. When a Threads, Instagram, or Facebook URL is embedded:
 
-* WordPress makes a server-side request to `graph.threads.com/oembed` (Threads), `graph.facebook.com/v25.0/instagram_oembed` (Instagram), `graph.facebook.com/oembed_post` (Facebook posts), or `graph.facebook.com/oembed_video` (Facebook videos) to fetch the embed HTML.
+* WordPress makes a server-side request to `graph.threads.com/oembed` (Threads), `graph.facebook.com/v25.0/instagram_oembed` (Instagram), `graph.facebook.com/v25.0/oembed_post` (Facebook posts), or `graph.facebook.com/v25.0/oembed_video` (Facebook videos) to fetch the embed HTML.
 * The embed HTML includes a script tag that loads `threads.com/embed.js`, `instagram.com/embed.js`, or `connect.facebook.net/en_US/sdk.js` on the frontend to render the embed.
 * No user data is collected or stored by this plugin.
 * Frontend embed rendering is subject to [Meta's Privacy Policy](https://www.facebook.com/privacy/policy/).
