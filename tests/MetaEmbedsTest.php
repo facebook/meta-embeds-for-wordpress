@@ -375,6 +375,6 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 		$this->assertTrue( defined( 'META_EMBEDS_VERSION' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_DIR' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_URL' ) );
-		$this->assertSame( '1.2.1', META_EMBEDS_VERSION );
+		$this->assertSame( '1.2.2', META_EMBEDS_VERSION );
 	}
 }

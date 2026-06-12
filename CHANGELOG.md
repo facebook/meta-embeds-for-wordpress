@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.2
+
+* Trimmed short description to meet the 150-character WordPress.org limit.
+* Reduced tags to the 5-tag WordPress.org maximum.
+
 ## 1.2.1
 
 * Fixed Instagram provider test to match `instagram_oembed` specifically instead of the ambiguous `graph.facebook.com`.
