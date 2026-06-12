@@ -1,14 +1,14 @@
 === Meta Embeds ===
 Contributors: facebook
-Tags: threads, instagram, facebook, embed, oembed, meta, social
+Tags: threads, instagram, facebook, embed, meta
 Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Embed Threads, Instagram, and Facebook content in your WordPress site. Simply paste a URL and get a rich embed — no access tokens or configuration required.
+Embed Threads, Instagram, and Facebook content in your WordPress site. Paste a URL and get a rich embed — no access tokens required.
 
 == Description ==
 
@@ -88,6 +88,10 @@ WordPress Core is considering adding Threads as a built-in oEmbed provider in a 
 The plugin automatically detects if your WordPress version already includes a Threads oEmbed provider and skips duplicate registration. You can safely keep the plugin active for its additional features (dedicated embed blocks, optimized embed script loading, Instagram and Facebook support) or deactivate it if Core support is sufficient for your needs.
 
 == Changelog ==
+
+= 1.2.2 =
+* Trimmed short description to meet the 150-character WordPress.org limit.
+* Reduced tags to the 5-tag WordPress.org maximum.
 
 = 1.2.1 =
 * Fixed Instagram provider test to match `instagram_oembed` specifically instead of the ambiguous `graph.facebook.com`.
