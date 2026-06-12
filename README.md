@@ -53,7 +53,7 @@ That's it — no configuration needed.
 Paste a Threads, Instagram, or Facebook URL on its own line in the editor:
 
 ```
-https://www.threads.com/@threads/post/DWjTI0cgH5O
+https://www.threads.com/@threads/post/DWjTI0cgH5O/
 ```
 
 ```
@@ -61,7 +61,7 @@ https://www.instagram.com/p/fA9uwTtkSN/
 ```
 
 ```
-https://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjz
+https://www.facebook.com/kevinloveofficial/posts/pfbid0nWhZeiMVjzLHVjzR6QngXeVug8Nw4YxncbbZrquMu72r3HM8a73k55keRWiaWNLTl/
 ```
 
 The plugin handles the rest.
@@ -76,7 +76,7 @@ The plugin handles the rest.
 
 This plugin registers Meta's oEmbed API endpoints as providers in WordPress. When a Threads, Instagram, or Facebook URL is embedded:
 
-- WordPress makes a server-side request to `graph.threads.com/oembed` (Threads), `graph.facebook.com/v25.0/instagram_oembed` (Instagram), `graph.facebook.com/oembed_post` (Facebook posts), or `graph.facebook.com/oembed_video` (Facebook videos) to fetch the embed HTML.
+- WordPress makes a server-side request to `graph.threads.com/oembed` (Threads), `graph.facebook.com/v25.0/instagram_oembed` (Instagram), `graph.facebook.com/v25.0/oembed_post` (Facebook posts), or `graph.facebook.com/v25.0/oembed_video` (Facebook videos) to fetch the embed HTML.
 - The embed HTML includes a script tag that loads `threads.com/embed.js`, `instagram.com/embed.js`, or `connect.facebook.net/en_US/sdk.js` on the frontend to render the embed.
 - No user data is collected or stored by this plugin.
 - Frontend embed rendering is subject to [Meta's Privacy Policy](https://www.facebook.com/privacy/policy/).

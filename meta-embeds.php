@@ -11,7 +11,7 @@
  * Plugin Name: Meta Embeds
  * Plugin URI:  https://github.com/facebook/meta-embeds-for-wordpress
  * Description: Embed Threads, Instagram, and Facebook content in your WordPress site. Simply paste a URL and get a rich embed — no access tokens or configuration required.
- * Version:     1.2.0
+ * Version:     1.2.1
  * Requires at least: 5.9
  * Tested up to:      6.9
  * Requires PHP:      7.4
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'META_EMBEDS_VERSION', '1.2.0' );
+define( 'META_EMBEDS_VERSION', '1.2.1' );
 define( 'META_EMBEDS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'META_EMBEDS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

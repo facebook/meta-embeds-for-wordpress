@@ -52,7 +52,7 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 
 		$found = false;
 		foreach ( $oembed->providers as $pattern => $provider_info ) {
-			if ( strpos( $provider_info[0], 'graph.facebook.com' ) !== false ) {
+			if ( strpos( $provider_info[0], 'instagram_oembed' ) !== false ) {
 				$found = true;
 				break;
 			}
@@ -375,6 +375,6 @@ class MetaEmbedsTest extends WP_UnitTestCase {
 		$this->assertTrue( defined( 'META_EMBEDS_VERSION' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_DIR' ) );
 		$this->assertTrue( defined( 'META_EMBEDS_PLUGIN_URL' ) );
-		$this->assertSame( '1.2.0', META_EMBEDS_VERSION );
+		$this->assertSame( '1.2.1', META_EMBEDS_VERSION );
 	}
 }
